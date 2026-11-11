@@ -1,0 +1,625 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+% -------------------- FORMATO --------------------
+\setstretch{1.08}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{4pt}
+\setlength{\headheight}{15pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small Equipo 57}
+\fancyhead[R]{\small Equidad lingüística en tecnologías de voz}
+
+
+\definecolor{azul}{RGB}{28,65,105}
+\definecolor{gris}{RGB}{245,246,248}
+
+% -------------------- COMANDOS --------------------
+\newcommand{\metric}[3]{%
+\begin{minipage}[t]{0.235\linewidth}
+\colorbox{gris}{%
+\parbox[t]{0.91\linewidth}{%
+\centering
+\vspace{3pt}
+{\Large\bfseries\color{azul}#1}\par
+{\small\bfseries #2}\par
+{\scriptsize #3}
+\vspace{3pt}
+}}
+\end{minipage}
+}
+
+\begin{document}
+
+% ============================================================
+% PORTADA / ENCABEZADO
+% ============================================================
+
+\begin{center}
+
+{\Large\bfseries\color{azul}
+HACIA LA EQUIDAD LINGÜÍSTICA EN TECNOLOGÍAS DE VOZ
+}
+
+\vspace{0.2cm}
+
+{\large
+Benchmark multimodal de reconocimiento automático del habla
+}
+
+\vspace{0.15cm}
+
+{\normalsize
+Resumen ejecutivo para CLEAR
+}
+
+\end{center}
+
+\vspace{0.3cm}
+
+\noindent
+\colorbox{gris}{
+\parbox{\dimexpr\linewidth-2\fboxsep\relax}{
+\small
+\textbf{Equipo:} 57 -- Proyecto Integrador, Grupo 10\\
+\textbf{Integrantes:} Alejandro Agustín Ahedo González;
+Andrés Roberto Osuna González;
+Sandra Luz Cervantes Espinoza\\
+\textbf{Organización receptora:} CLEAR
+(Coalition for Language Equity in AI Research)\\
+\textbf{Asesoría:} Dra. Liliana Ibeth Barbosa Santillán\\
+\textbf{Fecha:} 11 de noviembre de 2026
+}}
+
+% ============================================================
+\section*{\color{azul}1. La decisión ejecutiva}
+
+La equidad lingüística en inteligencia artificial exige que
+las personas puedan interactuar con estas tecnologías en sus
+idiomas sin que la calidad del servicio dependa injustificadamente
+de cuánto está representada su lengua en los datos digitales.
+
+Cuando un sistema de reconocimiento automático del habla
+funciona mejor para unos idiomas que para otros, reproduce
+una barrera de acceso: algunas comunidades reciben
+transcripciones más útiles, mientras otras enfrentan más
+errores, menor confiabilidad y una experiencia tecnológica
+desigual. Los promedios globales pueden ocultar esas diferencias.
+
+CLEAR (Coalition for Language Equity
+in AI Research) sitúa la equidad entre idiomas como un
+problema que debe medirse y abordarse con evidencia.
+En su análisis sobre la desigualdad de tokenización,
+CLEAR muestra cómo determinadas decisiones técnicas
+pueden imponer costos desiguales a distintas lenguas [1].
+
+Ese análisis se centra en tokenizadores de modelos de lenguaje, 
+buscando que los usuarios de IA puedan
+hacer visibles las disparidades lingüísticas y aplicar
+una evaluación transparente al reconocimiento automático
+del habla (ASR).
+
+El proyecto construye un flujo reproducible
+para comparar sistemas ASR, medir sus errores por idioma
+y aportar evidencia para seleccionar y mejorar tecnologías
+de voz con un criterio explícito de equidad lingüística. Utiliza el corpus abierto FLEURS, diseñado como benchmark
+multilingüe para investigación en tecnologías del habla [2],
+un pipeline de normalización acústica y textual y métricas
+complementarias WER y CER.
+
+El objetivo es
+identificar qué idiomas están mejor o peor atendidos bajo
+condiciones comparables y qué aspectos requieren más datos,
+evaluación o adaptación.
+
+% ============================================================
+\section*{\color{azul}2. Evidencia técnica disponible}
+
+En la evaluación final, la configuración seleccionada fue
+\texttt{openai/whisper-large-v3} con decodificación base
+(greedy), perteneciente a la familia de modelos de
+reconocimiento multilingüe de voz descrita por
+Radford et al. [3].
+
+Sobre el conjunto de prueba reservado de ocho idiomas,
+el notebook reporta los siguientes resultados:
+
+\vspace{0.2cm}
+
+\noindent
+\metric{4.91\%}{CER en prueba}{Ocho idiomas}
+\hfill
+\metric{8.03\%}{WER en prueba}{Idiomas con espacios}
+\hfill
+\metric{33.75\%}{Coincidencia exacta}{Texto normalizado}
+\hfill
+\metric{1.491 s}{Latencia promedio}{Por audio}
+
+\vspace{0.3cm}
+
+La búsqueda Beam Search con cinco haces obtuvo mejores
+cifras en validación (CER 2.96\% y WER 4.01\%), pero la
+selección final priorizó el equilibrio observado entre
+error y tiempo en prueba, no el resultado de validación
+por sí solo.
+
+
+\textbf{Implicación para la equidad lingüística.}
+
+Estos resultados constituyen una primera línea de evidencia,
+no una demostración de equidad entre idiomas.
+
+El conjunto final cubre ocho idiomas y el tamaño de prueba
+es reducido. Por ello, no permite afirmar que el sistema
+trate de manera justa a todas las comunidades lingüísticas
+ni extrapolar el desempeño a lenguas no evaluadas. Sí demuestra 
+por qué es necesario medir y reportar los
+errores por idioma y elegir métricas compatibles con cada
+sistema de escritura.
+
+El CER permite comparar sistemas de escritura sin espacios;
+el WER debe reservarse para idiomas en los que la
+segmentación por palabras sea válida.
+
+En el avance exploratorio, el uso de CER corrigió la lectura
+del japonés: Whisper pasó de un WER artificialmente elevado
+de 74.99\% a un CER de 6.21\%. Esto ilustra por qué la métrica
+debe adaptarse a la lengua. Investigaciones sobre evaluación
+de ASR en japonés también documentan dificultades relacionadas
+con segmentación y variantes ortográficas [5].
+
+Los resultados respaldan un piloto controlado de evaluación
+y transcripción asistida, pero no justifican todavía un
+despliegue productivo sin validación adicional.
+
+% ============================================================
+\section*{\color{azul}3. Contribución a la equidad lingüística
+y valor para CLEAR}
+
+La contribución central para CLEAR es aportar un instrumento
+reproducible para observar desigualdades de desempeño en
+tecnologías de voz y orientar decisiones de investigación,
+evaluación y mejora.
+
+La equidad no se presume por el carácter multilingüe de un
+modelo: debe examinarse con resultados desagregados,
+criterios adecuados a cada idioma y participación de personas
+con conocimiento lingüístico y cultural de las comunidades
+evaluadas.
+
+El benchmark puede ayudar a detectar brechas y priorizar
+nuevas evaluaciones; por sí solo no resuelve la falta de datos,
+representación o recursos para cada lengua.
+
+El pipeline implementado contempla:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item Estandarización del audio a 16 kHz, canal mono
+    y formato \texttt{float32}.
+    \item Normalización Unicode y reglas de procesamiento
+    textual.
+    \item Selección reproducible de muestras mediante
+    semilla fija.
+    \item Evaluación con métricas WER y CER.
+    \item Uso de caché persistente para reutilizar datos
+    procesados.
+\end{itemize}
+
+En la preparación de datos se documentó que la caché
+persistente redujo el tiempo de preparación de 106 minutos
+a menos de un minuto en ejecuciones posteriores.
+Esta mejora corresponde a la preparación del experimento
+y no debe interpretarse como ahorro mensual de operación
+productiva.
+
+\subsection*{Beneficios cuantificables}
+
+Para dimensionar el posible beneficio operativo se modela
+un escenario ilustrativo de 10,000 clips mensuales.
+
+Bajo los supuestos del Anexo A, un minuto de trabajo manual
+por clip, 1.491 segundos de inferencia por clip y revisión
+humana del 15\% de los resultados a un minuto por clip
+revisado, el tiempo de trabajo estimado baja de 166.67
+a 29.14 horas mensuales.
+
+El ahorro potencial es de:
+
+\begin{center}
+{\Large\bfseries\color{azul}
+137.53 horas mensuales (82.5\%)
+}
+\end{center}
+
+Es una proyección para dimensionar un piloto, no un ahorro
+observado ni un compromiso de capacidad. Deberá recalibrarse
+con tiempos reales, volumen y tasa de revisión del sponsor.
+
+\subsection*{Beneficios intangibles}
+
+La solución fortalece la toma de decisiones al ofrecer
+métricas desagregadas por idioma en lugar de depender
+exclusivamente de promedios globales.
+
+Mejora la calidad del proceso al incorporar normalización
+y criterios de evaluación adecuados a cada sistema de escritura.
+
+Simplifica el trabajo de investigación mediante pipelines,
+caché y resultados reproducibles.
+
+Finalmente, aporta una base para convertir la equidad
+lingüística en un criterio técnico verificable: no basta
+con que un sistema admita varios idiomas, es necesario
+comprobar cómo funciona en cada uno y transparentar dónde falla.
+
+% ============================================================
+\section*{\color{azul}4. Inversión, operación y condiciones
+de implementación}
+
+Se recomienda avanzar por etapas. Primero, cerrar la
+validación técnica del benchmark, después, ejecutar un
+piloto acotado con volúmenes, idiomas y criterios de
+aceptación acordados; y solo entonces decidir una
+integración productiva.
+
+El prototipo se ejecutó en Google Colab con GPU Tesla T4
+(14.56 GB de VRAM reportados). El notebook recomienda
+una GPU de al menos 16 GB, por lo que la infraestructura
+observada no debe asumirse como dimensionamiento definitivo
+para producción.
+
+Como estimación preliminar de planeación (no cotización
+de proveedor) se considera:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item 120 horas de desarrollo a MXN \$600 por hora:
+    MXN \$72,000.
+    \item 40 horas de implementación a MXN \$600 por hora:
+    MXN \$24,000.
+    \item 30 horas-GPU mensuales a MXN \$45 por hora:
+    MXN \$1,350.
+    \item Almacenamiento, monitoreo y respaldos:
+    MXN \$650 mensuales.
+\end{itemize}
+
+El costo operativo estimado es de MXN \$2,000 mensuales.
+El costo total de propiedad estimado para 12 meses es
+de MXN \$120,000.
+
+\vspace{0.2cm}
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\textbf{Concepto} & \textbf{Importe MXN}\\
+\midrule
+Desarrollo & \$72,000\\
+Implementación & \$24,000\\
+Operación mensual & \$2,000\\
+TCO estimado a 12 meses & \$120,000\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Esta estimación no incluye impuestos, servicios de API,
+integración empresarial, soporte extendido, anotación
+adicional ni revisión humana. Los supuestos deben
+sustituirse por cotizaciones y tarifas reales antes
+de autorizar presupuesto.
+
+% ============================================================
+\section*{\color{azul}5. Riesgos principales y mitigación}
+
+\small
+\begin{tabularx}{\linewidth}{
+    @{}
+    >{\raggedright\arraybackslash}p{0.28\linewidth}
+    X
+    @{}
+}
+\toprule
+\textbf{Riesgo} & \textbf{Medida de mitigación propuesta}\\
+\midrule
+
+Cobertura lingüística limitada &
+El experimento final reporta ocho idiomas.
+Ampliar progresivamente el conjunto y validar con hablantes
+o revisores competentes antes de extrapolar resultados
+a otras lenguas o dialectos.\\
+
+Errores de inferencia y reproducibilidad &
+Los registros del notebook muestran fallos en dos audios
+(alemán e italiano) asociados a entradas que activan el modo
+de audio largo. Corregir el manejo de duración, reejecutar
+la prueba completa y conservar logs, versiones y hashes
+de datos.\\
+
+Sesgo de medición &
+Mantener normalización específica por idioma; usar CER
+para escrituras sin espacios y WER solo donde la
+segmentación léxica sea válida. Reportar métricas por idioma,
+no únicamente promedios.\\
+
+Capacidad e infraestructura &
+Dimensionar GPU y concurrencia mediante pruebas de carga.\\
+
+Costos, privacidad y licencias &
+Establecer presupuesto por volumen, monitorear consumo,
+limitar datos a fuentes autorizadas y revisar licencias
+y condiciones de uso antes de incorporar datos o
+servicios externos.\\
+
+\bottomrule
+\end{tabularx}
+\normalsize
+
+% ============================================================
+\section*{\color{azul}6. Transferencia y continuidad}
+
+Al sponsor se propone transferir:
+
+\begin{enumerate}[leftmargin=*]
+    \item Repositorio de código y notebooks reproducibles.
+    \item Pipeline de ingesta, normalización y evaluación.
+    \item Resultados WER/CER y desglose por idioma.
+    \item Documentación de configuración, dependencias,
+    limitaciones y criterios de selección.
+    \item Archivos de resultados y visualizaciones.
+    \item Guía de ejecución y mantenimiento.
+\end{enumerate}
+
+El repositorio reportado por el equipo es
+\href{https://github.com/Luz026/VoiceBenchmark}{VoiceBenchmark}.
+El código se identifica con licencia MIT y el corpus
+FLEURS con CC-BY-4.0, sujeto a conservar las atribuciones
+y verificar las condiciones aplicables.
+
+La recomendación ejecutiva es autorizar un piloto técnico condicionado con enfoque de
+equidad lingüística, no un despliegue general inmediato.
+
+Sus condiciones de salida deben ser:
+
+\begin{itemize}[leftmargin=*]
+    \item Ejecución completa sin muestras fallidas.
+    \item Resultados estables en una prueba ampliada.
+    \item Validación lingüística por idioma.
+    \item Medición de costos reales.
+    \item Aprobación de privacidad y licenciamiento.
+\end{itemize}
+
+Con estas condiciones, CLEAR podrá utilizar el benchmark
+como mecanismo de observación y seguimiento de brechas
+en sistemas ASR, aportando evidencia para que la innovación
+en voz avance hacia una participación más equitativa de
+las comunidades lingüísticas.
+
+% ============================================================
+% ANEXO A
+% ============================================================
+
+\clearpage
+\section*{\color{azul}Anexo A. Supuestos y cálculo de
+beneficios y costos}
+
+\subsection*{A.1 Beneficio mensual de ahorro de tiempo}
+
+El siguiente cálculo es un escenario para
+dimensionar el piloto.
+
+\textbf{Supuestos:}
+
+\begin{itemize}[leftmargin=*]
+    \item Volumen mensual: 10,000 clips.
+    \item Trabajo manual de referencia: 1 minuto por clip.
+    \item Inferencia automatizada: 1.491 segundos por clip.
+    \item Control humano: revisión del 15\% de los clips,
+    a 1 minuto por clip revisado.
+\end{itemize}
+
+\textbf{Cálculo:}
+
+\begin{align*}
+T_{\text{manual}}
+&=
+\frac{10{,}000 \times 1\ \mathrm{min}}{60}
+=
+166.67\ \mathrm{h/mes}
+\\
+T_{\text{inferencia}}
+&=
+\frac{10{,}000 \times 1.491\ \mathrm{s}}{3{,}600}
+=
+4.14\ \mathrm{h/mes}
+\\
+T_{\text{revision}}
+&=
+\frac{10{,}000 \times 0.15 \times 1\ \mathrm{min}}{60}
+=
+25.00\ \mathrm{h/mes}
+\\
+T_{\text{automatizado}}
+&=
+4.14 + 25.00
+=
+29.14\ \mathrm{h/mes}
+\\
+Ahorro
+&=
+166.67 - 29.14
+=
+137.53\ \mathrm{h/mes}
+\\
+Reduccion
+&=
+\frac{137.53}{166.67}\times 100
+=
+82.5\%
+\end{align*}
+
+El ahorro de tiempo no equivale automáticamente a
+ahorro de caja: representa capacidad laboral potencial
+liberada. Para monetizarlo se requiere conocer el costo
+laboral real, la proporción de tiempo efectivamente
+reasignable y si se evita gasto incremental.
+
+No se reporta reducción de errores mensual ni incremento
+de ventas porque los avances no contienen una línea base
+operativa mensual que permita calcularlos de forma defendible.
+
+% -------------------- COSTOS --------------------
+
+\subsection*{A.2 Estimación de inversión y costo total
+de propiedad}
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{@{}Xrr@{}}
+\toprule
+\textbf{Concepto} &
+\textbf{Base supuesta} &
+\textbf{Importe MXN}\\
+\midrule
+Desarrollo & 120 h $\times$ \$600/h & \$72,000\\
+Implementación & 40 h $\times$ \$600/h & \$24,000\\
+GPU mensual & 30 h $\times$ \$45/h & \$1,350\\
+Almacenamiento, monitoreo y respaldos &
+Cuota mensual supuesta & \$650\\
+Operación mensual & GPU + servicios básicos & \$2,000\\
+Operación 12 meses & 12 $\times$ \$2,000 & \$24,000\\
+\midrule
+\textbf{TCO estimado a 12 meses} &
+\$72,000 + \$24,000 + \$24,000 &
+\textbf{\$120,000}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Las tarifas son supuestos de planeación, no precios
+observados ni cotizaciones. No incluyen impuestos,
+servicios de API, integración empresarial, soporte
+de terceros, anotación de nuevos corpus, seguridad
+especializada ni costo de revisores humanos.
+
+El costo de GPU debe recalcularse con el proveedor,
+tipo de acelerador, concurrencia, almacenamiento
+y volumen real.
+
+% -------------------- ACEPTACION --------------------
+
+\subsection*{A.3 Condiciones de aceptación recomendadas
+para el piloto}
+
+\begin{enumerate}[leftmargin=*]
+    \item Reejecutar la evaluación completa sin errores
+    de procesamiento y confirmar el denominador efectivo
+    de las métricas.
+
+    \item Congelar versiones de modelo, librerías, datos
+    y reglas de normalización.
+
+    \item Publicar WER y CER por idioma, además de promedios
+    macro y micro claramente identificados; incluir
+    dispersión y tamaño de muestra.
+
+    \item Validar muestras con hablantes competentes y,
+    cuando sea posible, representantes de las comunidades.
+
+    \item Medir latencia, VRAM, costo por mil audios y tasa
+    de revisión en la infraestructura objetivo.
+\end{enumerate}
+
+% ============================================================
+% ANEXO B: REFERENCIAS
+% ============================================================
+
+\clearpage
+\section*{\color{azul}Anexo B. Declaración de uso de IA
+y referencias}
+
+Los avances técnicos del proyecto documentan el uso de
+herramientas de IA como apoyo para estructuración,
+depuración de código, evaluación, métricas y redacción.
+
+El equipo conserva la responsabilidad de revisar,
+ejecutar y validar los resultados, el código y las
+conclusiones antes de su difusión. Esta declaración
+deberá cotejarse con el registro final de herramientas
+y contribuciones del equipo antes de la publicación
+institucional.
+
+\subsection*{Referencias bibliográficas}
+
+\begin{enumerate}[leftmargin=*,itemsep=7pt]
+
+\item CLEAR -- Coalition for Language Equity in AI Research.
+(2026). \textit{The Tokenizer Tax}. Portal oficial de CLEAR.
+Estudio sobre disparidades de tokenización entre idiomas.
+Disponible en:
+\url{https://clear-languages.org/blog/the-tokenizer-tax}
+
+\item Conneau, A., Ma, M., Khanuja, S., Zhang, Y.,
+Axelrod, V., Dalmia, S., Riesa, J., Rivera, C., y
+Bapna, A. (2022).
+\textit{FLEURS: Few-shot Learning Evaluation of Universal
+Representations of Speech}.
+arXiv:2205.12446.
+\url{https://arxiv.org/abs/2205.12446}
+
+\item Radford, A., Kim, J. W., Xu, T., Brockman, G.,
+McLeavey, C., y Sutskever, I. (2023).
+\textit{Robust Speech Recognition via Large-Scale Weak
+Supervision}.
+Proceedings of the 40th International Conference on
+Machine Learning, 202, 28492--28518.
+\url{https://proceedings.mlr.press/v202/radford23a.html}
+
+\item Thennal, D. K., James, J., Gopinath, D. P.,
+y Ashraf, K. (2025).
+\textit{Advocating Character Error Rate for Multilingual
+ASR Evaluation}.
+Findings of the Association for Computational Linguistics:
+NAACL 2025, 4941--4950.
+\url{https://doi.org/10.18653/v1/2025.findings-naacl.277}
+
+\item Karita, S., Sproat, R., y Ishikawa, H. (2023).
+\textit{Lenient Evaluation of Japanese Speech Recognition:
+Modeling Naturally Occurring Spelling Inconsistency}.
+Proceedings of the Workshop on Computation and Written
+Language (CAWL 2023), 61--70.
+\url{https://doi.org/10.18653/v1/2023.cawl-1.8}
+
+\item Ahia, O., Kumar, S., Gonen, H., Kasai, J.,
+Mortensen, D. R., Smith, N. A., y Tsvetkov, Y. (2023).
+\textit{Do All Languages Cost the Same? Tokenization in
+the Era of Commercial Language Models}.
+Proceedings of the 2023 Conference on Empirical Methods
+in Natural Language Processing, 9904--9923.
+\url{https://doi.org/10.18653/v1/2023.emnlp-main.614}
+
+\end{enumerate}
+
+% ============================================================
+% FIN DEL DOCUMENTO
+% ============================================================
+
+\end{document}
